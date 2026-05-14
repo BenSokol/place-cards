@@ -106,6 +106,7 @@ def main():
 
   # Generate template_card.stl if needed
   template_card_stl = root_output_dir.joinpath('template_card.stl')
+  logging.debug(f"Checking if template_card.stl exists: '{template_card_stl.exists()}'")
   should_regenerate_template = not template_card_stl.exists() or args.force_generate_template
 
   # Check if template_card.scad has been modified since template_card.stl was generated
