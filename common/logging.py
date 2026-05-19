@@ -4,7 +4,7 @@
 # Copyright (C) 2022 by Ben Sokol. All Rights Reserved.
 
 import logging
-import os
+import pathlib
 import sys
 import typing
 
@@ -15,11 +15,12 @@ class Logging(object):
     @staticmethod
     def setup_logfile(log_file: str):
         """ Add log file to logging """
-        log_filename = os.path.basename(log_file)
-        log_dir = os.path.dirname(log_file)
+        log_path = pathlib.Path(log_file)
+        log_filename = log_path.name
+        log_dir = log_path.parent
 
-        if log_dir and not os.path.exists(log_dir):
-            os.makedirs(os.path.normpath(log_dir))
+        if log_dir and not log_dir.exists():
+            log_dir.mkdir(parents=True, exist_ok=True)
 
         formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s", "%Y-%m-%d %H:%M:%S")
         logfile = logging.FileHandler(log_file, 'w')
@@ -32,7 +33,7 @@ class Logging(object):
     @staticmethod
     def remove_logfile(log_file: str):
         """ Remove log file from logging """
-        log_filename = os.path.basename(log_file)
+        log_filename = pathlib.Path(log_file).name
         logger = logging.getLogger()
         success = False
         if log_filename in handlers:
